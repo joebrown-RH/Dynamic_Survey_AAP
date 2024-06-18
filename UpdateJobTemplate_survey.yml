@@ -1,0 +1,57 @@
+---
+- name: Query inventory and update job template
+  hosts: localhost
+  gather_facts: no
+  vars:
+    inventory_file: "path/to/dynamic_inventory.yml"  # Replace with your inventory source
+    tag_to_filter: "desired_tag"                    # Replace with the tag you want to filter by
+    job_template_name: "Job Template Name"          # Replace with the name of your job template
+    controller_host: "https://controller.example.com" # Replace with your Ansible Controller URL
+    controller_username: "admin"                     # Replace with your Ansible Controller username
+    controller_password: "password"                  # Replace with your Ansible Controller password
+
+  tasks:
+    - name: Query dynamic inventory
+      ansible.builtin.command:
+        cmd: ansible-inventory -i {{ inventory_file }} --list
+      register: inventory_output
+
+    - name: Parse inventory JSON
+      ansible.builtin.set_fact:
+        inventory_data: "{{ inventory_output.stdout | from_json }}"
+
+    - name: Filter hosts by tag
+      ansible.builtin.set_fact:
+        filtered_hosts: >-
+          {{ inventory_data | json_query("[?tags contains '{{ tag_to_filter }}']") | map(attribute='name') | list }}
+
+    - name: Create list of hostnames
+      ansible.builtin.debug:
+        msg: "Filtered hosts: {{ filtered_hosts }}"
+
+    - name: Get the job template ID
+      ansible.controller.tower_job_template_info:
+        name: "{{ job_template_name }}"
+        controller_host: "{{ controller_host }}"
+        controller_username: "{{ controller_username }}"
+        controller_password: "{{ controller_password }}"
+        validate_certs: no
+      register: job_template
+
+    - name: Update job template survey
+      ansible.controller.tower_job_template_modify:
+        controller_host: "{{ controller_host }}"
+        controller_username: "{{ controller_username }}"
+        controller_password: "{{ controller_password }}"
+        validate_certs: no
+        job_template_id: "{{ job_template.results[0].id }}"
+        survey_spec:
+          name: "Host Selection Survey"
+          description: "Select hosts based on tags"
+          spec:
+            - type: "multiplechoice"
+              question_name: "Select Hosts"
+              question_description: "Choose the hosts to run the job on"
+              required: true
+              variable: "target_hosts"
+              choices: "{{ filtered_hosts }}"
