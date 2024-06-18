@@ -1,4 +1,4 @@
-- Name: Update Controller Job Template Survey Options
+- name: Update Controller Job Template Survey Options
   hosts: localhost
   gather_facts: false
 
