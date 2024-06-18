@@ -1,5 +1,5 @@
 ---
-- name: Query inventory and update job template
+- name: Query Controller inventory and update job template survey
   hosts: localhost
   gather_facts: no
   vars:
@@ -11,14 +11,6 @@
     controller_password: "password"                  # Replace with your Ansible Controller password
 
   tasks:
-    - name: Query dynamic inventory
-      ansible.builtin.command:
-        cmd: ansible-inventory -i {{ inventory_file }} --list
-      register: inventory_output
-
-    - name: Parse inventory JSON
-      ansible.builtin.set_fact:
-        inventory_data: "{{ inventory_output.stdout | from_json }}"
 
     - name: Filter hosts by tag
       ansible.builtin.set_fact:
@@ -30,28 +22,21 @@
         msg: "Filtered hosts: {{ filtered_hosts }}"
 
     - name: Get the job template ID
-      ansible.controller.tower_job_template_info:
+      ansible.controller.job_template:
         name: "{{ job_template_name }}"
-        controller_host: "{{ controller_host }}"
-        controller_username: "{{ controller_username }}"
-        controller_password: "{{ controller_password }}"
         validate_certs: no
       register: job_template
 
     - name: Update job template survey
-      ansible.controller.tower_job_template_modify:
-        controller_host: "{{ controller_host }}"
-        controller_username: "{{ controller_username }}"
-        controller_password: "{{ controller_password }}"
-        validate_certs: no
+      ansible.controller.job_template:
         job_template_id: "{{ job_template.results[0].id }}"
         survey_spec:
           name: "Host Selection Survey"
           description: "Select hosts based on tags"
           spec:
-            - type: "multiplechoice"
-              question_name: "Select Hosts"
-              question_description: "Choose the hosts to run the job on"
+            - type: "multiselect"
+              question_name: "Select Hosts to audit"
+              question_description: "Choose the hosts to run the audit job on"
               required: true
               variable: "target_hosts"
               choices: "{{ filtered_hosts }}"

@@ -1,0 +1,26 @@
+- Name: Update Controller Job Template Survey Options
+  hosts: localhost
+  gather_facts: false
+
+  tasks: 
+    
+    - name: Update job_template survey
+      ansible.controller.job_template:
+        name: "test"
+        survey_enabled: true 
+        survey_spec:
+          name: "Host Selection Survey"
+          description: "Select hosts based on tags"
+          spec:
+            - type: "multiselect"
+              question_name: "Select Hosts to audit"
+              question_description: "Choose the hosts to run the audit job on"
+              required: true
+              variable: "target_hosts"
+              choices: "{{ groups['audit'] }}"
+
+
+  #  - name: 
+  #  - name: 
+
+
