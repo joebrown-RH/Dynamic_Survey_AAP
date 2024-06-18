@@ -1,14 +1,14 @@
 ---
 - name: Query inventory and update job template
   hosts: localhost
-  gather_facts: no
+  gather_facts: false
   vars:
-    inventory_file: "path/to/dynamic_inventory.yml"  # Replace with your inventory source
-    tag_to_filter: "desired_tag"                    # Replace with the tag you want to filter by
-    job_template_name: "Job Template Name"          # Replace with the name of your job template
-    controller_host: "https://controller.example.com" # Replace with your Ansible Controller URL
-    controller_username: "admin"                     # Replace with your Ansible Controller username
-    controller_password: "password"                  # Replace with your Ansible Controller password
+    inventory_file: path/to/dynamic_inventory.yml # Replace with your inventory source
+    tag_to_filter: desired_tag # Replace with the tag you want to filter by
+    job_template_name: Job Template Name # Replace with the name of your job template
+    controller_host: https://controller.example.com # Replace with your Ansible Controller URL
+    controller_username: admin # Replace with your Ansible Controller username
+    controller_password: password # Replace with your Ansible Controller password
 
   tasks:
     - name: Query dynamic inventory
@@ -35,7 +35,7 @@
         controller_host: "{{ controller_host }}"
         controller_username: "{{ controller_username }}"
         controller_password: "{{ controller_password }}"
-        validate_certs: no
+        validate_certs: false
       register: job_template
 
     - name: Update job template survey
@@ -43,15 +43,15 @@
         controller_host: "{{ controller_host }}"
         controller_username: "{{ controller_username }}"
         controller_password: "{{ controller_password }}"
-        validate_certs: no
+        validate_certs: false
         job_template_id: "{{ job_template.results[0].id }}"
         survey_spec:
-          name: "Host Selection Survey"
-          description: "Select hosts based on tags"
+          name: Host Selection Survey
+          description: Select hosts based on tags
           spec:
-            - type: "multiplechoice"
-              question_name: "Select Hosts"
-              question_description: "Choose the hosts to run the job on"
+            - type: multiplechoice
+              question_name: Select Hosts
+              question_description: Choose the hosts to run the job on
               required: true
-              variable: "target_hosts"
+              variable: target_hosts
               choices: "{{ filtered_hosts }}"
