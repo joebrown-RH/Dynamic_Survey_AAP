@@ -1,0 +1,9 @@
+---
+- name: Testing output of the json inventory query
+  hosts: localhost
+  gather_facts: false
+
+  tasks: 
+    - name: Print output
+      ansible.buitlin.debug: 
+        msg: "{{ lookup('ansible.builtin.template', 'template/survey_example.json') | from_json }}"
