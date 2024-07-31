@@ -7,6 +7,10 @@
     - name: Update job_template survey
       ansible.controller.job_template:
         name: "test"
+        job_type: run
+        inventory: "Demo Inventory"
+        project: "Demo Project"
+        playbook: "hello_world.yml"
         survey_enabled: true 
         survey_spec:
           name: "Host Selection Survey"
