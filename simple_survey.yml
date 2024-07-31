@@ -12,4 +12,4 @@
         project: "Demo Project"
         playbook: "hello_world.yml"
         survey_enabled: true 
-        survey_spec: "{{ lookup('ansible.builtin.template', 'template/survey_example.json') | to_yaml | list }}"
+        survey_spec: "{{ lookup('ansible.builtin.template', 'template/survey_example.json') | regex_replace('\\n', '') }}"
