@@ -12,19 +12,4 @@
         project: "Demo Project"
         playbook: "hello_world.yml"
         survey_enabled: true 
-        survey_spec:
-          name: "Host Selection Survey"
-          description: "Select hosts based on tags"
-          spec:
-            - type: "multiselect"
-              question_name: "Select Hosts to audit"
-              question_description: "Choose the hosts to run the audit job on"
-              required: true
-              variable: "target_hosts"
-              choices: "{{ groups['audit'] | list }}"
-              min: 0
-
-  #  - name: 
-  #  - name: 
-
-
+        survey: "{{ lookup('ansible.builtin.template', 'template/survey_example.json') }}"
