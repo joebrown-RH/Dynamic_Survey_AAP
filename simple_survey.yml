@@ -18,7 +18,7 @@
               required: true
               variable: "target_hosts"
               choices: "{{ groups['audit'] | list }}"
-              min: "0"
+              min: '0'
               max: ""
 
 
