@@ -17,7 +17,7 @@
               question_description: "Choose the hosts to run the audit job on"
               required: true
               variable: "target_hosts"
-              choices: "{{ groups['audit'] | string }}"
+              choices: "{{ groups['audit'] | list }}"
 
 
   #  - name: 
