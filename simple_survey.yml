@@ -3,6 +3,10 @@
   gather_facts: false
 
   tasks: 
+
+    - name: Filter hosts by tag
+      ansible.builtin.set_fact: 
+        filtered_hosts: "{{ lookup('ansible.builtin.template', 'template/survey_example.json') }}"
     
     - name: Update job_template survey
       ansible.controller.job_template:
@@ -12,4 +16,13 @@
         project: "Demo Project"
         playbook: "hello_world.yml"
         survey_enabled: true 
-        survey_spec: "{{ lookup('ansible.builtin.template', 'template/survey_example.json') | from_json }}"
+        survey_spec:
+          name: "Host Selection Survey"
+          description: "Select hosts based on tags"
+          spec:
+            - type: "multiselect"
+              question_name: "Select Hosts to audit"
+              question_description: "Choose the hosts to run the audit job on"
+              required: true
+              variable: "target_hosts"
+              choices: "{{ filtered_hosts }}"
