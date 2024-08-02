@@ -7,3 +7,7 @@
     - name: Print output
       ansible.builtin.debug: 
         msg: "{{ lookup('ansible.builtin.template', 'template/survey_example.json') }}"
+
+    - name: Print output of groups
+      ansible.builtin.debug: 
+        msg: "{{ groups['audit'] }}"
