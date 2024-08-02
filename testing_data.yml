@@ -10,4 +10,4 @@
 
     - name: Print output of groups
       ansible.builtin.debug: 
-        msg: "{{ groups['audit'] }}"
+        msg: "{{ groups['audit'] | unique | join('\n') }}"
