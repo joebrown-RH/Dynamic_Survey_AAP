@@ -8,6 +8,10 @@
       ansible.builtin.debug: 
         msg: "{{ lookup('ansible.builtin.template', 'template/survey_example.json') }}"
 
+    - name: setting group list fact
+      ansible.builtin.set_fact:
+        audit_list: "{{ groups['audit'] | unique | join('\n') }}"
+
     - name: Print output of groups
       ansible.builtin.debug: 
-        msg: "{{ groups['audit'] | unique | join('\n') }}"
+        msg: "{{ audit_list }}"
