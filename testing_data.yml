@@ -10,7 +10,7 @@
 
     - name: setting group list fact
       ansible.builtin.set_fact:
-        audit_list: "{{ groups['audit'] | unique | join('\n') }}"
+        audit_list: "{{ groups['audit'] | unique | join(\n) }}"
 
     - name: Print output of groups
       ansible.builtin.debug: 
