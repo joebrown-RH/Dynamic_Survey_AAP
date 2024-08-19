@@ -8,7 +8,7 @@
         "default": "",
         "max": 0,
         "required": true,
-        "choices": "loop: {{ groups['audit'] }}",
+        "choices": loop: {{ groups['audit'] }},
         "new_question": true,
         "variable": "target_hosts",
         "question_name": "Select Hosts to audit",
