@@ -12,8 +12,8 @@
         project: "Demo Project"
         playbook: "hello_world.yml"
         survey_enabled: true 
-        survey_spec: "{{ query('ansible.builtin.template', 'template/survey_example.json') | from_json }}"
+        survey_spec: "{{ query('ansible.builtin.template', 'template/survey_example.json') }}"
         
     - name: test output
       ansible.builtin.debug:
-        msg: "{{ query('ansible.builtin.template', 'template/survey_example.json') | from_json }}"
+        msg: "{{ query('ansible.builtin.template', 'template/survey_example.json') }}"
