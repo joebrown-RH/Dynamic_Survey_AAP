@@ -1,19 +1,19 @@
+---
 - name: Update Controller Job Template Survey Options
   hosts: localhost
   gather_facts: false
 
-  tasks: 
-    
+  tasks:
     - name: Update job_template survey
       ansible.controller.job_template:
-        name: "test"
+        name: test
         job_type: run
-        inventory: "Demo Inventory"
-        project: "Demo Project"
-        playbook: "hello_world.yml"
-        survey_enabled: true 
+        inventory: Demo Inventory
+        project: Demo Project
+        playbook: hello_world.yml
+        survey_enabled: true
         survey_spec: "{{ lookup('ansible.builtin.template', 'template/survey_example.json') }}"
-        
+
     - name: test output
       ansible.builtin.debug:
         msg: "{{ query('ansible.builtin.template', 'template/survey_example.json') }}"

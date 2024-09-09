@@ -3,9 +3,9 @@
   hosts: localhost
   gather_facts: false
 
-  tasks: 
+  tasks:
     - name: Print output
-      ansible.builtin.debug: 
+      ansible.builtin.debug:
         msg: "{{ query('ansible.builtin.template', 'template/survey_example.json') }}"
 
     - name: setting group list fact
@@ -13,5 +13,5 @@
         audit_list: "{{ groups['audit'] | unique | list }}"
 
     - name: Print output of groups
-      ansible.builtin.debug: 
+      ansible.builtin.debug:
         msg: "{{ audit_list }}"
