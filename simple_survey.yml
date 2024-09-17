@@ -9,8 +9,8 @@
         name: "COMPLIANCE / AWS Security Audit"
         job_type: run
         inventory: "Demo Inventory"
-        project: "Demo Project"
-        playbook: "hello_world.yml"
+        project: "Product Demos"
+        playbook: "linux/insights_compliance_scan.yml"
         survey_enabled: true 
         survey_spec: "{{ lookup('ansible.builtin.template', 'template/survey_example.json') }}"
         
