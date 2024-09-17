@@ -6,7 +6,7 @@
     
     - name: Update job_template survey
       ansible.controller.job_template:
-        name: "test"
+        name: "COMPLIANCE / AWS Security Audit"
         job_type: run
         inventory: "Demo Inventory"
         project: "Demo Project"
