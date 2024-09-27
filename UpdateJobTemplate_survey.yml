@@ -1,17 +1,16 @@
 ---
 - name: Query Controller inventory and update job template survey
   hosts: localhost
-  gather_facts: no
+  gather_facts: false
   vars:
-    inventory_file: "path/to/dynamic_inventory.yml"  # Replace with your inventory source
-    tag_to_filter: "desired_tag"                    # Replace with the tag you want to filter by
-    job_template_name: "Job Template Name"          # Replace with the name of your job template
-    controller_host: "https://controller.example.com" # Replace with your Ansible Controller URL
-    controller_username: "admin"                     # Replace with your Ansible Controller username
-    controller_password: "password"                  # Replace with your Ansible Controller password
+    inventory_file: path/to/dynamic_inventory.yml # Replace with your inventory source
+    tag_to_filter: desired_tag # Replace with the tag you want to filter by
+    job_template_name: Job Template Name # Replace with the name of your job template
+    controller_host: https://controller.example.com # Replace with your Ansible Controller URL
+    controller_username: admin # Replace with your Ansible Controller username
+    controller_password: password # Replace with your Ansible Controller password
 
   tasks:
-
     - name: Filter hosts by tag
       ansible.builtin.set_fact:
         filtered_hosts: >-
@@ -22,21 +21,21 @@
         msg: "Filtered hosts: {{ filtered_hosts }}"
 
     - name: Get the job template ID
-      ansible.controller.job_template:
-        name: "{{ job_template_name }}"
-        validate_certs: no
       register: job_template
+      awx.awx.job_template:
+        name: "{{ job_template_name }}"
+        validate_certs: false
 
     - name: Update job template survey
-      ansible.controller.job_template:
+      awx.awx.job_template:
         job_template_id: "{{ job_template.results[0].id }}"
         survey_spec:
-          name: "Host Selection Survey"
-          description: "Select hosts based on tags"
+          name: Host Selection Survey
+          description: Select hosts based on tags
           spec:
-            - type: "multiselect"
-              question_name: "Select Hosts to audit"
-              question_description: "Choose the hosts to run the audit job on"
+            - type: multiselect
+              question_name: Select Hosts to audit
+              question_description: Choose the hosts to run the audit job on
               required: true
-              variable: "target_hosts"
+              variable: target_hosts
               choices: "{{ filtered_hosts }}"
